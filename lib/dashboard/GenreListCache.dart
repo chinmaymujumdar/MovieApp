@@ -35,7 +35,7 @@ class GenreListCache{
           str.write(_genre[i].name + '/');
         }
       }
-      return str.toString().replaceRange(str.length - 1, str.length, '');
+      return str.length==0?'':str.toString().replaceRange(str.length - 1, str.length, '');
     }else{
       return '';
     }
@@ -49,9 +49,21 @@ class GenreListCache{
           str.write(_TvGenre[i].name + '/');
         }
       }
-      return str.toString().replaceRange(str.length - 1, str.length, '');
+      return str.length==0?'':str.toString().replaceRange(str.length - 1, str.length, '');
     }else{
       return '';
     }
+  }
+
+  List<String> getTvGenreList(List<int> id){
+    List<String> list = [];
+    if (id.length > 0) {
+      for (int i = 0; i < _genre.length; i++) {
+        if (id.contains(_genre[i].id)) {
+          list.add(_genre[i].name);
+        }
+      }
+    }
+    return list;
   }
 }

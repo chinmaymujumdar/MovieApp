@@ -26,6 +26,7 @@ class MovieHorizontalList extends StatelessWidget {
                 builder: (context)=> AllMovies(movieType: movieType,)
             ));
           },
+          behavior: HitTestBehavior.opaque,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 2.0,horizontal: 12.0),
             child: Row(
@@ -103,9 +104,10 @@ class MovieHorizontalList extends StatelessWidget {
           children: <Widget>[
             ClipRRect(
               borderRadius: BorderRadius.circular(10.0),
-              child: Image(
-                image: NetworkImage('https://image.tmdb.org/t/p/w154'+item.posterPath),
-                fit: BoxFit.fill,
+              child: FadeInImage.assetNetwork(
+                placeholder: 'images/placeholder.png',
+                image: 'https://image.tmdb.org/t/p/w154'+item.posterPath,
+                fit: BoxFit.cover,
               ),
             ),
             Container(

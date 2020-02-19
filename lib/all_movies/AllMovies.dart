@@ -124,8 +124,10 @@ class _AllMoviesState extends State<AllMovies> {
               },
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10.0),
-                child: Image(
-                  image: NetworkImage('https://image.tmdb.org/t/p/w154'+movieList[index].posterPath),
+                child: FadeInImage.assetNetwork(
+                  placeholder: 'images/placeholder.png',
+                  image: 'https://image.tmdb.org/t/p/w154'+(movieList[index].posterPath??''),
+                  fit: BoxFit.cover,
                 ),
               ),
             ),

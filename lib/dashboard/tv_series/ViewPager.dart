@@ -5,6 +5,7 @@ import 'package:movies_app/network/NetworkCall.dart';
 import 'package:movies_app/dashboard/GenreListCache.dart';
 import 'package:movies_app/MovieType.dart';
 import 'package:movies_app/all_movies/AllTVShows.dart';
+import 'package:movies_app/detail_page/DetailPageTV.dart';
 
 class ViewPager extends StatefulWidget {
   @override
@@ -116,48 +117,55 @@ class _ViewPagerState extends State<ViewPager> {
   Widget _itemBuilder(ResultsTV item){
     return Padding(
       padding: const EdgeInsets.all(5.0),
-      child: Stack(
-        children: <Widget>[
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10.0),
-            child: Image(
-              image: NetworkImage('https://image.tmdb.org/t/p/w500'+item.backdropPath),
-              fit: BoxFit.fill,
+      child: GestureDetector(
+        onTap: (){
+          Navigator.push(context, MaterialPageRoute(
+              builder: (context)=>DetailPageTV(tvid: item.id,)
+          ));
+        },
+        child: Stack(
+          children: <Widget>[
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10.0),
+              child: Image(
+                image: NetworkImage('https://image.tmdb.org/t/p/w500'+item.backdropPath),
+                fit: BoxFit.fill,
+              ),
             ),
-          ),
-          Positioned(
-            bottom: 35.0,
-            left: 10.0,
-            child: Container(
-              width: 350.0,
-              child: Text(
-                item.name,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20.0,
+            Positioned(
+              bottom: 35.0,
+              left: 10.0,
+              child: Container(
+                width: 350.0,
+                child: Text(
+                  item.name,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20.0,
+                  ),
                 ),
               ),
             ),
-          ),
-          Positioned(
-            bottom: 15.0,
-            left: 10.0,
-            child: Container(
-              width: 380.0,
-              child: Text(
-                cache.getTVGenre(item.genreIds).replaceAll('/',' . '),
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  color: Color(0xFFb3b3b3),
-                  fontSize: 15.0,
-                  fontWeight: FontWeight.bold,
+            Positioned(
+              bottom: 15.0,
+              left: 10.0,
+              child: Container(
+                width: 380.0,
+                child: Text(
+                  cache.getTVGenre(item.genreIds).replaceAll('/',' . '),
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: Color(0xFFb3b3b3),
+                    fontSize: 15.0,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

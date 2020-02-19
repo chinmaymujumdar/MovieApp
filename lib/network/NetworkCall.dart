@@ -9,6 +9,9 @@ import 'package:movies_app/dashboard/GenreListCache.dart';
 import 'package:movies_app/model_classes/movie/UpcomingMovies.dart';
 import 'package:movies_app/model_classes/tv_shows/ResultsTV.dart';
 import 'package:movies_app/model_classes/tv_shows/TVShows.dart';
+import 'package:movies_app/model_classes/tv_shows/Season.dart';
+import 'package:movies_app/model_classes/tv_shows/Cast.dart';
+import 'package:movies_app/model_classes/tv_shows/CastList.dart';
 
 class NetworkCall{
 
@@ -209,10 +212,42 @@ class NetworkCall{
   }
 
   Future<dynamic> fetchTVDetail(int tvid) async{
-    String url='$kBaseURL/3/tv/1396?api_key=$kAPIKey&language=en-US&append_to_response=videos';
+    String url='$kBaseURL/3/tv/$tvid?api_key=$kAPIKey&language=en-US&append_to_response=videos';
     http.Response response=await http.get(url);
     if(response.statusCode==200){
       return json.decode(response.body);
+    }else{
+      throw Exception('Failed to load jobs from API');
+    }
+  }
+
+  Future<List<ResultsTV>> fetchRecommendationsTVList(int tvid)async{
+    String url = '$kBaseURL/3/tv/$tvid/recommendations?api_key=$kAPIKey&language=en-US&page=1';
+    http.Response response=await http.get(url);
+    if(response.statusCode==200){
+      TVShows tvShows=TVShows.fromJson(json.decode(response.body));
+      return tvShows.results.map((result)=>ResultsTV.fromJson(result.toJson())).toList();
+    }else{
+      throw Exception('Failed to load jobs from API');
+    }
+  }
+
+  Future<Season> fetchSeasonDetails(int seasonId,int seasonNo) async{
+    String url='$kBaseURL/3/tv/$seasonId/season/$seasonNo?api_key=$kAPIKey&language=en-US';
+    http.Response response=await http.get(url);
+    if(response.statusCode==200){
+      return Season.fromJson(json.decode(response.body));
+    }else{
+      throw Exception('Failed to load jobs from API');
+    }
+  }
+
+  Future<List<Cast>> fetchCastList(int showId) async{
+    String url='$kBaseURL/3/tv/$showId/credits?api_key=$kAPIKey&language=en-US';
+    http.Response response=await http.get(url);
+    if(response.statusCode==200){
+      CastList castList=CastList.fromJson(json.decode(response.body));
+      return castList.cast.map((item)=>Cast.fromJson(item.toJson())).toList();
     }else{
       throw Exception('Failed to load jobs from API');
     }

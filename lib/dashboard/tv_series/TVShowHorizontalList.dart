@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movies_app/model_classes/tv_shows/ResultsTV.dart';
 import 'package:movies_app/dashboard/GenreListCache.dart';
-import 'package:movies_app/all_movies/AllMovies.dart';
 import 'package:movies_app/MovieType.dart';
 import 'package:movies_app/Constants.dart';
 import 'package:movies_app/all_movies/AllTVShows.dart';
@@ -27,6 +26,7 @@ class TVShowHorizontalList extends StatelessWidget {
                 builder: (context)=> AllTVShows(movieType: movieType,)
             ));
           },
+          behavior: HitTestBehavior.opaque,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 2.0,horizontal: 12.0),
             child: Row(
@@ -96,7 +96,7 @@ class TVShowHorizontalList extends StatelessWidget {
       child: GestureDetector(
         onTap: (){
           Navigator.push(context, MaterialPageRoute(
-            builder: (context)=>DetailPageTV()
+            builder: (context)=>DetailPageTV(tvid: item.id,)
           ));
         },
         child: Column(
@@ -104,8 +104,10 @@ class TVShowHorizontalList extends StatelessWidget {
           children: <Widget>[
             ClipRRect(
               borderRadius: BorderRadius.circular(10.0),
-              child: Image(
-                image: NetworkImage('https://image.tmdb.org/t/p/w154'+item.posterPath),
+              child: FadeInImage.assetNetwork(
+                placeholder: 'images/placeholder.png',
+                image: 'https://image.tmdb.org/t/p/w154'+item.posterPath,
+                fit: BoxFit.cover,
               ),
             ),
             Container(

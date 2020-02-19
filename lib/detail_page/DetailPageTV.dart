@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:movies_app/network/NetworkCall.dart';
 import 'package:movies_app/model_classes/tv_shows/ResultsTV.dart';
+import 'package:movies_app/dashboard/GenreListCache.dart';
+import 'package:movies_app/model_classes/movie/VideosList.dart';
+import 'package:movies_app/model_classes/movie/Video.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:movies_app/detail_page/season/SeasonDetailPage.dart';
+import 'package:movies_app/Utils.dart';
 
 class DetailPageTV extends StatefulWidget {
 
@@ -14,8 +20,17 @@ class DetailPageTV extends StatefulWidget {
 
 class _DetailPageTVState extends State<DetailPageTV> {
 
-  List<String> list=['Action','Adventure','Comedy'];
   NetworkCall networkCall=NetworkCall();
+  GenreListCache cache=GenreListCache();
+
+  void _launchURL(String key) async{
+    String url='https://www.youtube.com/watch?v=$key';
+    if(await canLaunch(url)){
+      await launch(url);
+    }else{
+      throw 'Could not launch $url';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +61,7 @@ class _DetailPageTVState extends State<DetailPageTV> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Image(
-            image: NetworkImage('https://image.tmdb.org/t/p/w500/hbgPoI0GBrXJfGjYNV2fMQU0xou.jpg'),
+            image: item['backdrop_path']==null?AssetImage('images/placeholder.png'):NetworkImage('https://image.tmdb.org/t/p/w500${item['backdrop_path'].toString()}'),
           ),
           SizedBox(
             height: 20.0,
@@ -56,7 +71,7 @@ class _DetailPageTVState extends State<DetailPageTV> {
             child: Row(
               children: <Widget>[
                 Text(
-                  '2017 - 2019',
+                  getYear(item),
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 15.0,
@@ -64,10 +79,10 @@ class _DetailPageTVState extends State<DetailPageTV> {
                   ),
                 ),
                 SizedBox(
-                  width: 15.0,
+                  width: 25.0,
                 ),
                 Text(
-                  '2 seasons',
+                  item['number_of_seasons'].toString()+' Seasons',
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 15.0,
@@ -78,12 +93,12 @@ class _DetailPageTVState extends State<DetailPageTV> {
             ),
           ),
           SizedBox(
-            height: 15.0,
+            height: 10.0,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: Text(
-              'Marvel\'s The Punisher',
+              item['name'],
               style: TextStyle(
                   color: Colors.white,
                   fontSize: 40.0,
@@ -93,7 +108,7 @@ class _DetailPageTVState extends State<DetailPageTV> {
             ),
           ),
           SizedBox(
-            height: 15.0,
+            height: 10.0,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -101,6 +116,31 @@ class _DetailPageTVState extends State<DetailPageTV> {
               children: <Widget>[
                 OutlineButton(
                   onPressed: (){
+                    List<Video> list=getVideoList(item);
+                    if(list.length!=0) {
+                      showMenu(
+                        color: Color(0xFF4d4d4d),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0)),
+                        context: context,
+                        position: RelativeRect.fromLTRB(10.0, 310.0, 0.0, 10.0),
+                        items: list.map((item) =>
+                            PopupMenuItem<String>(
+                              value: item.key,
+                              child: GestureDetector(
+                                onTap: () {
+                                  _launchURL(item.key);
+                                },
+                                child: ListTile(
+                                  leading: Icon(
+                                    Icons.videocam, color: Colors.orange,),
+                                  title: Text(item.name,
+                                    style: TextStyle(color: Colors.orange),),
+                                ),
+                              ),
+                            )).toList(),
+                      );
+                    }
                   },
                   borderSide: BorderSide(color: Colors.orange,width: 2.0),
 
@@ -156,7 +196,7 @@ class _DetailPageTVState extends State<DetailPageTV> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
             child: Text(
-              'After the murder of his family, Marine veteran Frank Castle becomes the vigilante known as "The Punisher," with only one goal in mind: to avenge them.',
+              item['overview'],
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 15.0,
@@ -171,7 +211,7 @@ class _DetailPageTVState extends State<DetailPageTV> {
           Padding(
             padding: const EdgeInsets.only(left: 7.0),
             child: Row(
-              children: list.map<Widget>((item)=>Container(
+              children: getGenreList(item).map<Widget>((item)=>Container(
                 padding: EdgeInsets.symmetric(horizontal: 10.0,vertical: 5.0),
                 margin: EdgeInsets.symmetric(horizontal: 3.0),
                 decoration: BoxDecoration(
@@ -202,7 +242,7 @@ class _DetailPageTVState extends State<DetailPageTV> {
                   width: 5.0,
                 ),
                 Text(
-                  '7.8',
+                  item['vote_average'].toString(),
                   style: TextStyle(
                       color: Colors.green,
                       fontSize: 16.0,
@@ -240,34 +280,47 @@ class _DetailPageTVState extends State<DetailPageTV> {
           SizedBox(
             height: 15.0,
           ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 10.0),
-            child: Column(
-              children: <Widget>[
-                Divider(
-                  color: Color(0xFF737373),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(
-                      'Episode Guide',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18.0,
-                        fontWeight: FontWeight.bold,
+          GestureDetector(
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(
+                  builder: (context)=>SeasonDetailPage(
+                    noOfSeason: item['number_of_seasons'],
+                    tvid: widget.tvid,
+                    name: item['name'],
+                    runtime: getRuntime(item),
+                  )
+              ));
+            },
+            behavior: HitTestBehavior.opaque,
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 10.0),
+              child: Column(
+                children: <Widget>[
+                  Divider(
+                    color: Color(0xFF737373),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        'Episode Guide',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    Icon(
-                      Icons.keyboard_arrow_right,
-                      color: Colors.white,
-                    )
-                  ],
-                ),
-                Divider(
-                  color: Color(0xFF737373),
-                ),
-              ],
+                      Icon(
+                        Icons.keyboard_arrow_right,
+                        color: Colors.white,
+                      )
+                    ],
+                  ),
+                  Divider(
+                    color: Color(0xFF737373),
+                  ),
+                ],
+              ),
             ),
           ),
           SizedBox(
@@ -299,7 +352,7 @@ class _DetailPageTVState extends State<DetailPageTV> {
             height: 15.0,
           ),
           FutureBuilder<List<ResultsTV>>(
-            future: networkCall.fetchOnAirTVShowList(1),
+            future: networkCall.fetchRecommendationsTVList(item['id']),
             builder: (context,snapshot){
               if(snapshot.hasData){
                 List<ResultsTV> list= snapshot.data;
@@ -333,6 +386,9 @@ class _DetailPageTVState extends State<DetailPageTV> {
             padding: const EdgeInsets.all(2.0),
             child: GestureDetector(
               onTap: (){
+                Navigator.push(context, MaterialPageRoute(
+                    builder: (context)=>DetailPageTV(tvid: movieList[index].id,)
+                ));
               },
               child: Image(
                 image: NetworkImage('https://image.tmdb.org/t/p/w154'+movieList[index].posterPath),
@@ -343,5 +399,34 @@ class _DetailPageTVState extends State<DetailPageTV> {
         ),
       ),
     );
+  }
+
+  String getYear(var item){
+    if(item['status']=='Ended'){
+      return item['first_air_date'].toString().split('-')[0]+'-'+item['last_air_date'].toString().split('-')[0];
+    }else{
+      return item['first_air_date'].toString().split('-')[0]+'-';
+    }
+  }
+
+  List<String> getGenreList(var item){
+    List<dynamic> genre=item['genres'];
+    List<int> ids=[];
+    for(int i=0;i<genre.length;i++){
+      ids.add(genre[i]['id']);
+    }
+    return cache.getTvGenreList(ids);
+  }
+
+  List<Video> getVideoList(var item){
+    VideosList video=VideosList.fromJson(item['videos']);
+    List<Video> videoList=[];
+    videoList.addAll(video.results.map((result)=>Video.fromJson(result.toJson())).toList());
+    return videoList;
+  }
+
+  String getRuntime(var item){
+    List<dynamic> list=item['episode_run_time'];
+    return list[0].toString();
   }
 }

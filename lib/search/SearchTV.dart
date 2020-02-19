@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:movies_app/model_classes/tv_shows/ResultsTV.dart';
 import 'package:movies_app/network/NetworkCall.dart';
 import 'package:movies_app/model_classes/tv_shows/TVShows.dart';
-import 'package:movies_app/detail_page/DetailPage.dart';
+import 'package:movies_app/detail_page/DetailPageTV.dart';
 
 enum CalledFrom{
   ONCHANGE,
@@ -84,6 +84,9 @@ class _SearchTVState extends State<SearchTV> {
         itemBuilder: (context,index){
           return GestureDetector(
             onTap: (){
+              Navigator.push(context,MaterialPageRoute(
+                builder:(context)=>DetailPageTV(tvid: searchResult[index].id)
+              ));
             },
             child: ListTile(
               leading: CircleAvatar(

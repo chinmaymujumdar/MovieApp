@@ -4,6 +4,7 @@ import 'package:movies_app/network/NetworkCall.dart';
 import 'package:movies_app/model_classes/tv_shows/TVShows.dart';
 import 'package:movies_app/MovieType.dart';
 import 'package:movies_app/search/SearchTV.dart';
+import 'package:movies_app/detail_page/DetailPageTV.dart';
 
 class AllTVShows extends StatefulWidget {
 
@@ -107,11 +108,16 @@ class _AllTVShowsState extends State<AllTVShows> {
             padding: const EdgeInsets.all(2.0),
             child: GestureDetector(
               onTap: (){
+                Navigator.push(context, MaterialPageRoute(
+                    builder: (context)=>DetailPageTV(tvid: tvShowList[index].id,)
+                ));
               },
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10.0),
-                child: Image(
-                  image: NetworkImage('https://image.tmdb.org/t/p/w154'+tvShowList[index].posterPath),
+                child: FadeInImage.assetNetwork(
+                  placeholder: 'images/placeholder.png',
+                  image: 'https://image.tmdb.org/t/p/w154'+(tvShowList[index].posterPath??''),
+                  fit: BoxFit.cover,
                 ),
               ),
             ),

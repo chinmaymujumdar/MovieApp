@@ -67,7 +67,8 @@ class _DetailPageState extends State<DetailPage> {
                       Align(
                         alignment: Alignment.center,
                         child: Image(
-                          image: ((widget.movieItem.posterPath)!=null)?NetworkImage('https://image.tmdb.org/t/p/w154'+widget.movieItem.posterPath):null,
+                          image: ((widget.movieItem.posterPath)!=null)?NetworkImage('https://image.tmdb.org/t/p/w154'+widget.movieItem.posterPath)
+                              :AssetImage('images/placeholder.png'),
                         ),
                       ),
                       Positioned(
