@@ -18,7 +18,10 @@ class EpisodeDetailPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Episode ${episode.episodeNumber}'
+          'Episode ${episode.episodeNumber}',
+          style: TextStyle(
+            fontFamily: 'Roboto-Bold'
+          ),
         ),
       ),
       body: SingleChildScrollView(
@@ -38,9 +41,9 @@ class EpisodeDetailPage extends StatelessWidget {
                   Text(
                     '$showName SN${episode.seasonNumber+1}',
                     style: TextStyle(
+                        fontFamily: 'Roboto-Regular',
                         color: Colors.white,
                         fontSize: 18.0,
-                        fontWeight: FontWeight.w600,
                         letterSpacing: 1.5
                     ),
                     textAlign: TextAlign.start,
@@ -57,7 +60,7 @@ class EpisodeDetailPage extends StatelessWidget {
                           TextSpan(
                               text: 'Ep ${episode.episodeNumber}'+' ',
                               style: TextStyle(
-                                  fontWeight: FontWeight.w600,
+                                  fontFamily: 'Roboto-Bold',
                                   fontSize: 35.0,
                                   letterSpacing: 1.0
                               )
@@ -65,8 +68,8 @@ class EpisodeDetailPage extends StatelessWidget {
                           TextSpan(
                               text: episode.name,
                               style: TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 35.0,
+                                  fontFamily: 'Roboto-Medium',
+                                  fontSize: 32.0,
                                   letterSpacing: 2.0
                               )
                           ),
@@ -98,9 +101,9 @@ class EpisodeDetailPage extends StatelessWidget {
                   Text(
                     'Add to watchlist'.toUpperCase(),
                     style: TextStyle(
+                        fontFamily: 'Roboto-Medium',
                         color: Colors.orange,
                         fontSize: 18.0,
-                        fontWeight: FontWeight.bold,
                         letterSpacing: 1.0
                     ),
                   ),
@@ -110,9 +113,9 @@ class EpisodeDetailPage extends StatelessWidget {
                   Text(
                     episode.overview,
                     style: TextStyle(
+                      fontFamily: 'Roboto-Light',
                       color: Colors.white,
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w400,
+                      fontSize: 15.0,
                       letterSpacing: 1.0,
                     ),
                   ),SizedBox(
@@ -187,8 +190,8 @@ class EpisodeDetailPage extends StatelessWidget {
                   Text(
                     castList[index].name,
                     style: TextStyle(
+                      fontFamily: 'Roboto-Bold',
                       color: Colors.white,
-                      fontWeight: FontWeight.bold
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -198,8 +201,8 @@ class EpisodeDetailPage extends StatelessWidget {
                   Text(
                     'as ${castList[index].character}',
                     style: TextStyle(
+                      fontFamily: 'Roboto-Medium',
                       color: Colors.grey,
-                      fontWeight: FontWeight.w600
                     ),
                     overflow: TextOverflow.ellipsis,
                   )

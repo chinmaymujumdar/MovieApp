@@ -60,9 +60,9 @@ class _ViewPagerState extends State<ViewPager> {
                     Text(
                       'All',
                       style: TextStyle(
+                        fontFamily: 'Roboto-Medium',
                         color: Colors.orange,
                         fontSize: 16.0,
-                        fontWeight: FontWeight.bold,
                       ),
                     ),
                     Icon(
@@ -141,8 +141,8 @@ class _ViewPagerState extends State<ViewPager> {
                   item.name,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
+                    fontFamily: 'Roboto-Medium',
                     color: Colors.white,
-                    fontWeight: FontWeight.bold,
                     fontSize: 20.0,
                   ),
                 ),
@@ -157,9 +157,9 @@ class _ViewPagerState extends State<ViewPager> {
                   cache.getTVGenre(item.genreIds).replaceAll('/',' . '),
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
+                    fontFamily: 'Roboto-Regular',
                     color: Color(0xFFb3b3b3),
                     fontSize: 15.0,
-                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),

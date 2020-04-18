@@ -6,6 +6,7 @@ import 'package:movies_app/Utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:movies_app/model_classes/movie/Video.dart';
 import 'package:movies_app/model_classes/movie/VideosList.dart';
+import 'package:movies_app/DatabaseHelper.dart';
 
 class DetailPage extends StatefulWidget {
 
@@ -24,11 +25,15 @@ class _DetailPageState extends State<DetailPage> {
   String runtime='        ';
   List<Video> videoList=[];
   final globalKey = GlobalKey<ScaffoldState>();
+  DatabaseHelper db=DatabaseHelper();
+  bool _favourite=false;
+  bool _watchlist=false;
 
   @override
   void initState() {
     super.initState();
     fetchRunTime();
+    fetchFavourites();
   }
 
   void fetchRunTime() async{
@@ -40,6 +45,14 @@ class _DetailPageState extends State<DetailPage> {
       runtime=Utils.getTimeInHrMin(time);
     });
   }
+  
+  void fetchFavourites() async{
+    dynamic fav= await widget.networkCall.checkForFavWatch(widget.movieItem.id);
+    setState(() {
+      _favourite=fav['favorite'];
+      _watchlist=fav['watchlist'];
+    });
+  }
 
   void _launchURL(String key) async{
     String url='https://www.youtube.com/watch?v=$key';
@@ -48,6 +61,24 @@ class _DetailPageState extends State<DetailPage> {
     }else{
       throw 'Could not launch $url';
     }
+  }
+
+  void insertFavourite() async{
+    bool fav=await widget.networkCall.addToFavourite(widget.movieItem.id, !_favourite);
+    setState(() {
+      if(fav) {
+        _favourite = !_favourite;
+      }
+    });
+  }
+
+  void insertWatchlist() async{
+    bool watch=await widget.networkCall.addToWatchlist(widget.movieItem.id, !_watchlist);
+    setState(() {
+      if(watch) {
+        _watchlist = !_watchlist;
+      }
+    });
   }
 
   @override
@@ -92,8 +123,8 @@ class _DetailPageState extends State<DetailPage> {
                   Text(
                     widget.movieItem.title,
                     style: TextStyle(
+                      fontFamily:'Roboto-Black',
                       color: Colors.white,
-                      fontWeight: FontWeight.w900,
                       fontSize: 20.0,
                       letterSpacing: 1.2,
                     ),
@@ -105,9 +136,9 @@ class _DetailPageState extends State<DetailPage> {
                   Text(
                     widget.cache.getGenre(widget.movieItem.genreIds).replaceAll('/', ' . '),
                     style: TextStyle(
+                        fontFamily:'Roboto-Medium',
                         color: Colors.white,
                         fontSize: 13.0,
-                        fontWeight: FontWeight.w500,
                         letterSpacing: 1.0
                     ),
                     textAlign: TextAlign.center,
@@ -138,11 +169,12 @@ class _DetailPageState extends State<DetailPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
                       IconText(
-                        icon: Icons.add,
-                        text: 'My List',
+                        icon: _watchlist?Icons.check:Icons.add,
+                        text: 'Watch List',
+                        onPress: insertWatchlist,
                       ),
                       IconText(
-                        icon: Icons.favorite_border,
+                        icon: Icons.thumb_up,
                         text: 'Rate',
                       ),
                       IconText(
@@ -150,8 +182,10 @@ class _DetailPageState extends State<DetailPage> {
                         text: 'Share',
                       ),
                       IconText(
-                        icon: Icons.cloud_download,
-                        text: 'Download',
+                        icon: _favourite?Icons.favorite:Icons.favorite_border,
+                        text: 'Favourite',
+                        color: Colors.red,
+                        onPress: insertFavourite,
                       ),
                     ],
                   ),
@@ -163,9 +197,9 @@ class _DetailPageState extends State<DetailPage> {
                     child: Text(
                       widget.movieItem.overview,
                       style: TextStyle(
+                          fontFamily:'Roboto-Light',
                           color: Colors.white,
                           fontSize: 15.0,
-                          fontWeight: FontWeight.w600
                       ),
                       textAlign: TextAlign.justify,
                     ),
@@ -180,9 +214,9 @@ class _DetailPageState extends State<DetailPage> {
                         child: Text(
                           'MORE LIKE THIS',
                           style: TextStyle(
+                            fontFamily:'Roboto-Bold',
                             color: Colors.white,
                             fontSize: 13.0,
-                            fontWeight: FontWeight.bold,
                             letterSpacing: 1.0,
                           ),
                         ),
@@ -300,31 +334,36 @@ class IconText extends StatelessWidget {
 
   final String text;
   final IconData icon;
+  final Function onPress;
+  final Color color;
 
-  IconText({@required this.text,@required this.icon});
+  IconText({@required this.text,@required this.icon,this.onPress,this.color=Colors.orange});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Icon(
-          icon,
-          color: Colors.orange,
-          size: 20.0,
-        ),
-        SizedBox(
-          height: 3.0,
-        ),
-        Text(
-          text,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 12.0,
-            fontWeight: FontWeight.w600,
-            letterSpacing: 0.5,
+    return GestureDetector(
+      onTap: onPress,
+      child: Column(
+        children: <Widget>[
+          Icon(
+            icon,
+            color: color,
+            size: 20.0,
           ),
-        ),
-      ],
+          SizedBox(
+            height: 3.0,
+          ),
+          Text(
+            text,
+            style: TextStyle(
+              fontFamily:'Roboto-Regular',
+              color: Colors.white,
+              fontSize: 12.0,
+              letterSpacing: 0.5,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -367,9 +406,9 @@ class EclipseText extends StatelessWidget {
       child: Text(
         text,
         style: TextStyle(
+          fontFamily:'Roboto-Medium',
           color: Colors.white,
           fontSize: 15.0,
-          fontWeight: FontWeight.bold
         ),
       ),
     );

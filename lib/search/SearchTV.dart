@@ -97,6 +97,7 @@ class _SearchTVState extends State<SearchTV> {
               title: Text(
                 searchResult[index].name,
                 style: TextStyle(
+                    fontFamily: 'Roboto-Regular',
                     color: Colors.white,
                     fontSize: 18.0
                 ),
@@ -104,6 +105,7 @@ class _SearchTVState extends State<SearchTV> {
               subtitle: Text(
                 (searchResult[index].firstAirDate!=null)?searchResult[index].firstAirDate.split('-')[0]:'',
                 style: TextStyle(
+                    fontFamily: 'Roboto-Light',
                     color: Colors.grey,
                     fontSize: 15.0
                 ),

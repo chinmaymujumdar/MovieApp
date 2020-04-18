@@ -98,6 +98,7 @@ class _SearchMovieState extends State<SearchMovie> {
               title: Text(
                 searchResult[index].title,
                 style: TextStyle(
+                    fontFamily: 'Roboto-Regular',
                     color: Colors.white,
                     fontSize: 18.0
                 ),
@@ -105,6 +106,7 @@ class _SearchMovieState extends State<SearchMovie> {
               subtitle: Text(
                   (searchResult[index].releaseDate!=null)?searchResult[index].releaseDate.split('-')[0]:'',
                 style: TextStyle(
+                    fontFamily: 'Roboto-Light',
                     color: Colors.grey,
                     fontSize: 15.0
                 ),

@@ -2,5 +2,9 @@ enum MovieType{
   POPULAR,
   TOP_RATED,
   UPCOMING,
-  TV_ON_AIR
+  TV_ON_AIR,
+  MOVIE,
+  TV_SHOW,
+  WATCH_LIST_MOVIE,
+  WATCH_LIST_TV_SHOW
 }

@@ -32,7 +32,7 @@ class _MoviesState extends State<Movies> {
             height: 10.0,
           ),
           MovieHorizontalList(
-            title: 'Popular',
+            title: 'Upcoming',
             apiResult: networkCall.fetchUpcomingMovieList(1),
             movieType: MovieType.UPCOMING,
           ),

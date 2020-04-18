@@ -42,9 +42,9 @@ class MovieHorizontalList extends StatelessWidget {
                     Text(
                       'All',
                       style: TextStyle(
+                        fontFamily: 'Roboto-Medium',
                         color: Colors.orange,
                         fontSize: 16.0,
-                        fontWeight: FontWeight.bold,
                       ),
                     ),
                     Icon(
@@ -117,8 +117,8 @@ class MovieHorizontalList extends StatelessWidget {
                 item.title,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
+                  fontFamily: 'Roboto-Medium',
                   color: Colors.white,
-                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
@@ -129,9 +129,9 @@ class MovieHorizontalList extends StatelessWidget {
                 genreListCache.getGenre(item.genreIds),
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  color: Color(0xFF4d4d4d),
+                  fontFamily: 'Roboto-Regular',
+                  color: Color(0xFF808080),
                   fontSize: 12.0,
-                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),

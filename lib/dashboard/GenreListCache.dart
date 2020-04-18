@@ -66,4 +66,18 @@ class GenreListCache{
     }
     return list;
   }
+
+  String getFavMovieGenre(List<int> id) {
+    if (id.length > 0) {
+      StringBuffer str = StringBuffer();
+      for (int i = 0; i < _genre.length; i++) {
+        if (id.contains(_genre[i].id)) {
+          str.write(_genre[i].name + '.');
+        }
+      }
+      return str.length==0?'':str.toString().replaceRange(str.length - 1, str.length, '');
+    }else{
+      return '';
+    }
+  }
 }

@@ -3,6 +3,7 @@ import 'package:movies_app/dashboard/movie/Movies.dart';
 import 'package:movies_app/dashboard/tv_series/TVSeries.dart';
 import 'package:movies_app/search/SearchPage.dart';
 import 'package:movies_app/search/SearchTV.dart';
+import 'package:movies_app/dashboard/profile/ProfileScreen.dart';
 
 class Dashboard extends StatefulWidget {
   @override
@@ -14,7 +15,8 @@ class _DashboardState extends State<Dashboard> {
   int _selectedIndex=0;
   List<Widget> _widgetList=<Widget>[
     Movies(),
-    TVSeries()
+    TVSeries(),
+    ProfileScreen()
   ];
   
   void _onItemTapped(int index){
@@ -26,7 +28,7 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: _selectedIndex<=1?AppBar(
         title: GestureDetector(
           onTap: (){
             Navigator.push(context, MaterialPageRoute(
@@ -34,7 +36,7 @@ class _DashboardState extends State<Dashboard> {
             ));
           },
           child: Container(
-            padding: EdgeInsets.symmetric(vertical: 8.0,horizontal: 5.0),
+            padding: EdgeInsets.symmetric(vertical: 8.0,horizontal: 15.0),
             decoration: BoxDecoration(
               color: Color(0xFF4d4d4d),
               borderRadius: BorderRadius.circular(5.0),
@@ -43,13 +45,14 @@ class _DashboardState extends State<Dashboard> {
             child: Text(
               _selectedIndex==0?'Search Movies':'Search TV',
               style: TextStyle(
+                fontFamily: 'Roboto-Light',
                 color:Color(0xFF999999),
                 fontSize: 18.0,
               ),
             ),
           ),
         ),
-      ),
+      ):null,
       body: _widgetList.elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
           items: const <BottomNavigationBarItem>[
@@ -60,6 +63,7 @@ class _DashboardState extends State<Dashboard> {
               title: Text(
                   'Movies',
                 style: TextStyle(
+                  fontFamily: 'Roboto-Medium'
                 ),
               ),
             ),
@@ -70,9 +74,21 @@ class _DashboardState extends State<Dashboard> {
               title: Text(
                   'TV Series',
                 style: TextStyle(
+                    fontFamily: 'Roboto-Medium'
                 ),
               ),
             ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.account_circle,
+              ),
+              title: Text(
+                'Me',
+                style: TextStyle(
+                    fontFamily: 'Roboto-Medium'
+                ),
+              ),
+            )
           ],
         backgroundColor: Color(0xFF262626),
         selectedItemColor: Colors.orange,

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movies_app/dashboard/Dashboard.dart';
+import 'package:movies_app/login/LoginScreen.dart';
+import 'package:movies_app/splash/SplashScreen.dart';
 
 void main() => runApp(MyApp());
 
@@ -14,7 +16,7 @@ class MyApp extends StatelessWidget {
           accentColor: Colors.orange,
           scaffoldBackgroundColor: Color(0xFF1a1a1a)
       ),
-      home: Dashboard()
+      home: SplashScreen()
     );
   }
 }

@@ -73,9 +73,9 @@ class _DetailPageTVState extends State<DetailPageTV> {
                 Text(
                   getYear(item),
                   style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 15.0,
-                      fontWeight: FontWeight.w700
+                    fontFamily:'Roboto-Regular',
+                    color: Colors.white,
+                    fontSize: 15.0,
                   ),
                 ),
                 SizedBox(
@@ -84,9 +84,9 @@ class _DetailPageTVState extends State<DetailPageTV> {
                 Text(
                   item['number_of_seasons'].toString()+' Seasons',
                   style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 15.0,
-                      fontWeight: FontWeight.w700
+                    fontFamily:'Roboto-Regular',
+                    color: Colors.white,
+                    fontSize: 15.0,
                   ),
                 )
               ],
@@ -100,9 +100,9 @@ class _DetailPageTVState extends State<DetailPageTV> {
             child: Text(
               item['name'],
               style: TextStyle(
+                fontFamily: 'Roboto-Bold',
                   color: Colors.white,
                   fontSize: 40.0,
-                  fontWeight: FontWeight.w700,
                   letterSpacing: 1.0
               ),
             ),
@@ -135,7 +135,7 @@ class _DetailPageTVState extends State<DetailPageTV> {
                                   leading: Icon(
                                     Icons.videocam, color: Colors.orange,),
                                   title: Text(item.name,
-                                    style: TextStyle(color: Colors.orange),),
+                                    style: TextStyle(fontFamily:'Roboto-Regular',color: Colors.orange),),
                                 ),
                               ),
                             )).toList(),
@@ -153,9 +153,9 @@ class _DetailPageTVState extends State<DetailPageTV> {
                       Text(
                         'TRAILER',
                         style: TextStyle(
+                            fontFamily:'Roboto-Regular',
                             color: Colors.white,
                             fontSize: 14.0,
-                            fontWeight: FontWeight.w700,
                             letterSpacing: 1.0
                         ),
                       )
@@ -178,9 +178,9 @@ class _DetailPageTVState extends State<DetailPageTV> {
                       Text(
                         'My List',
                         style: TextStyle(
+                            fontFamily:'Roboto-Regular',
                             color: Colors.white,
                             fontSize: 14.0,
-                            fontWeight: FontWeight.w700,
                             letterSpacing: 1.0
                         ),
                       )
@@ -198,9 +198,9 @@ class _DetailPageTVState extends State<DetailPageTV> {
             child: Text(
               item['overview'],
               style: TextStyle(
+                fontFamily:'Roboto-Light',
                 color: Colors.white,
                 fontSize: 15.0,
-                fontWeight: FontWeight.w600,
               ),
               textAlign: TextAlign.justify,
             ),
@@ -221,6 +221,7 @@ class _DetailPageTVState extends State<DetailPageTV> {
                 child: Text(
                   item,
                   style: TextStyle(
+                      fontFamily:'Roboto-Bold',
                       color: Colors.white
                   ),
                 ),
@@ -244,9 +245,9 @@ class _DetailPageTVState extends State<DetailPageTV> {
                 Text(
                   item['vote_average'].toString(),
                   style: TextStyle(
-                      color: Colors.green,
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w700
+                    fontFamily:'Roboto-Medium',
+                    color: Colors.green,
+                    fontSize: 16.0,
                   ),
                 ),
                 SizedBox(
@@ -255,9 +256,9 @@ class _DetailPageTVState extends State<DetailPageTV> {
                 Text(
                   'Rate:',
                   style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w700
+                    fontFamily:'Roboto-Medium',
+                    color: Colors.white,
+                    fontSize: 16.0,
                   ),
                 ),
                 SizedBox(
@@ -305,9 +306,9 @@ class _DetailPageTVState extends State<DetailPageTV> {
                       Text(
                         'Episode Guide',
                         style: TextStyle(
+                          fontFamily:'Roboto-Medium',
                           color: Colors.white,
                           fontSize: 18.0,
-                          fontWeight: FontWeight.bold,
                         ),
                       ),
                       Icon(
@@ -333,9 +334,9 @@ class _DetailPageTVState extends State<DetailPageTV> {
                 child: Text(
                   'MORE LIKE THIS',
                   style: TextStyle(
+                    fontFamily:'Roboto-Bold',
                     color: Colors.white,
                     fontSize: 13.0,
-                    fontWeight: FontWeight.bold,
                     letterSpacing: 1.0,
                   ),
                 ),

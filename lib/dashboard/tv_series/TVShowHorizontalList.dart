@@ -42,9 +42,9 @@ class TVShowHorizontalList extends StatelessWidget {
                     Text(
                       'All',
                       style: TextStyle(
+                        fontFamily: 'Roboto-Medium',
                         color: Colors.orange,
                         fontSize: 16.0,
-                        fontWeight: FontWeight.bold,
                       ),
                     ),
                     Icon(
@@ -117,6 +117,7 @@ class TVShowHorizontalList extends StatelessWidget {
                 item.name,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
+                  fontFamily: 'Roboto-Medium',
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
@@ -129,9 +130,9 @@ class TVShowHorizontalList extends StatelessWidget {
                 genreListCache.getTVGenre(item.genreIds),
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                  color: Color(0xFF4d4d4d),
+                  fontFamily: 'Roboto-Regular',
+                  color: Color(0xFF808080),
                   fontSize: 12.0,
-                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),

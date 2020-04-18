@@ -56,7 +56,10 @@ class _SeasonDetailPageState extends State<SeasonDetailPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          widget.name
+          widget.name,
+          style: TextStyle(
+              fontFamily: 'Roboto-Bold'
+          ),
         ),
       ),
       body: Column(
@@ -92,7 +95,8 @@ class _SeasonDetailPageState extends State<SeasonDetailPage> {
                             child: Text(
                               'Season ${item+1}   ',
                               style: TextStyle(
-                                color: Colors.white
+                                  fontFamily:'Roboto-Regular',
+                                  color: Colors.white
                               ),
                             ),
                           );
@@ -111,9 +115,9 @@ class _SeasonDetailPageState extends State<SeasonDetailPage> {
                 Text(
                   noOfEpisodes.toString()+' episodes',
                   style: TextStyle(
+                    fontFamily:'Roboto-Regular',
                     color: Colors.white,
                     fontSize: 15.0,
-                    fontWeight: FontWeight.w600
                   ),
                 )
               ],
@@ -138,17 +142,17 @@ class _SeasonDetailPageState extends State<SeasonDetailPage> {
                     leading: Text(
                         (seasonNo+1).toString()+'.'+(index+1).toString(),
                       style: TextStyle(
+                        fontFamily:'Roboto-Regular',
                         color: Colors.white,
                         fontSize: 15.0,
-                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     title: Text(
                       episodeList[index].name,
                       style: TextStyle(
+                        fontFamily:'Roboto-Medium',
                         color: Colors.white,
                         fontSize: 17.0,
-                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     subtitle: Row(
@@ -164,6 +168,7 @@ class _SeasonDetailPageState extends State<SeasonDetailPage> {
                         Text(
                           episodeList[index].voteAverage.toString(),
                           style: TextStyle(
+                            fontFamily:'Roboto-Regular',
                             color: Colors.grey,
                           ),
                         ),
@@ -173,6 +178,7 @@ class _SeasonDetailPageState extends State<SeasonDetailPage> {
                         Text(
                           episodeList[index].airDate==null?'':episodeList[index].airDate,
                           style: TextStyle(
+                            fontFamily:'Roboto-Regular',
                             color: Colors.grey,
                           ),
                         ),

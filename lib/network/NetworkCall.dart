@@ -12,6 +12,7 @@ import 'package:movies_app/model_classes/tv_shows/TVShows.dart';
 import 'package:movies_app/model_classes/tv_shows/Season.dart';
 import 'package:movies_app/model_classes/tv_shows/Cast.dart';
 import 'package:movies_app/model_classes/tv_shows/CastList.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class NetworkCall{
 
@@ -250,6 +251,168 @@ class NetworkCall{
       return castList.cast.map((item)=>Cast.fromJson(item.toJson())).toList();
     }else{
       throw Exception('Failed to load jobs from API');
+    }
+  }
+
+  Future<dynamic> createRequestToken() async{
+    String url='$kBaseURL/3/authentication/token/new?api_key=$kAPIKey';
+    http.Response response=await http.get(url);
+    if(response.statusCode==200){
+      return json.decode(response.body);
+    }else{
+      throw Exception('Failed to load jobs from API');
+    }
+  }
+
+  Future<http.Response> validateRequestViaLogin(String email,String password) async{
+    String loginUrl='$kBaseURL/3/authentication/token/validate_with_login?api_key=$kAPIKey';
+    dynamic res=await createRequestToken();
+    Map<String,String> map=Map();
+    map['username']=email;
+    map['password']=password;
+    map['request_token']=res['request_token'];
+    http.Response loginRes=await http.post(loginUrl,body: map);
+    if(loginRes.statusCode==200){
+      http.Response sessionRes=await createSession(json.decode(loginRes.body)['request_token']);
+      return sessionRes;
+    }else{
+      return loginRes;
+    }
+  }
+
+  Future<dynamic> createSession(String reqToken) async{
+    String url='$kBaseURL/3/authentication/session/new?api_key=$kAPIKey';
+    Map<String,String> map=Map();
+    map['request_token']=reqToken;
+    http.Response response=await http.post(url,body: map);
+    return response;
+  }
+
+  Future<Movie> getFavourites(int page) async{
+    SharedPreferences pref=await SharedPreferences.getInstance();
+    String sessionId=pref.getString(kSessionId);
+    String url='$kBaseURL/3/account/{account_id}/favorite/movies?api_key=$kAPIKey&session_id=$sessionId&language=en-US&sort_by=created_at.asc&page=$page';
+    http.Response response=await http.get(url);
+    if(response.statusCode==200){
+      return Movie.fromJson(json.decode(response.body));
+    }else{
+      throw Exception('Failed to load jobs from API');
+    }
+  }
+
+  Future<TVShows> getFavouritesTV(int page) async{
+    SharedPreferences pref=await SharedPreferences.getInstance();
+    String sessionId=pref.getString(kSessionId);
+    String url='$kBaseURL/3/account/{account_id}/favorite/tv?api_key=$kAPIKey&session_id=$sessionId&language=en-US&sort_by=created_at.asc&page=$page';
+    http.Response response=await http.get(url);
+    if(response.statusCode==200){
+      return TVShows.fromJson(json.decode(response.body));
+    }else{
+      throw Exception('Failed to load jobs from API');
+    }
+  }
+
+  Future<Movie> getWatchMovies(int page) async{
+    SharedPreferences pref=await SharedPreferences.getInstance();
+    String sessionId=pref.getString(kSessionId);
+    String url='$kBaseURL/3/account/{account_id}/watchlist/movies?api_key=$kAPIKey&session_id=$sessionId&language=en-US&sort_by=created_at.asc&page=$page';
+    http.Response response=await http.get(url);
+    if(response.statusCode==200){
+      return Movie.fromJson(json.decode(response.body));
+    }else{
+      throw Exception('Failed to load jobs from API');
+    }
+  }
+
+  Future<TVShows> getWatchTV(int page) async{
+    SharedPreferences pref=await SharedPreferences.getInstance();
+    String sessionId=pref.getString(kSessionId);
+    String url='$kBaseURL/3/account/{account_id}/watchlist/tv?api_key=$kAPIKey&session_id=$sessionId&language=en-US&sort_by=created_at.asc&page=$page';
+    http.Response response=await http.get(url);
+    if(response.statusCode==200){
+      return TVShows.fromJson(json.decode(response.body));
+    }else{
+      throw Exception('Failed to load jobs from API');
+    }
+  }
+
+  Future<dynamic> getUserDetail() async{
+    SharedPreferences pref=await SharedPreferences.getInstance();
+    String sessionId=pref.getString(kSessionId);
+    String url='$kBaseURL/3/account?api_key=$kAPIKey&session_id=$sessionId';
+    http.Response response=await http.get(url);
+    if(response.statusCode==200){
+      return json.decode(response.body);
+    }else{
+      throw Exception('Failed to load jobs from API');
+    }
+  }
+
+  Future<bool> logoutUser() async{
+    SharedPreferences pref=await SharedPreferences.getInstance();
+    String sessionId=pref.getString(kSessionId);
+    String url='$kBaseURL/3/authentication/session?api_key=$kAPIKey';
+    Map<String,String> map=Map();
+    map['session_id']=sessionId;
+    var uri=Uri.parse(url);
+    final client=http.Client();
+    var request = http.Request("DELETE", uri);
+    request.bodyFields=map;
+    http.Response response=await client.send(request).then(http.Response.fromStream);
+    if(response.statusCode==200){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
+  Future<dynamic> checkForFavWatch(int movieId) async{
+    SharedPreferences pref=await SharedPreferences.getInstance();
+    String sessionId=pref.getString(kSessionId);
+    String url='$kBaseURL/3/movie/$movieId/account_states?api_key=$kAPIKey&session_id=$sessionId';
+    http.Response response=await http.get(url);
+    if(response.statusCode==200){
+      return json.decode(response.body);
+    }else{
+      throw Exception('Failed to load jobs from API');
+    }
+  }
+
+  Future<bool> addToFavourite(int movieId,bool value) async{
+    SharedPreferences pref=await SharedPreferences.getInstance();
+    String sessionId=pref.getString(kSessionId);
+    String url='$kBaseURL/3/account/{account_id}/favorite?api_key=$kAPIKey&session_id=$sessionId';
+    var map=jsonEncode({
+      "media_type": "movie",
+      "media_id": movieId,
+      "favorite": value
+    });
+    Map<String,String> header=Map();
+    header['Content-Type']='application/json;charset=utf-8';
+    http.Response response=await http.post(url,body: map,headers:header);
+    if((response.statusCode==200&&!value)||(response.statusCode==201&&value)){
+      return true;
+    }else{
+      return false;
+    }
+  }
+
+  Future<bool> addToWatchlist(int movieId,bool value) async{
+    SharedPreferences pref=await SharedPreferences.getInstance();
+    String sessionId=pref.getString(kSessionId);
+    String url='$kBaseURL/3/account/{account_id}/watchlist?api_key=$kAPIKey&session_id=$sessionId';
+    var map=jsonEncode({
+      "media_type": "movie",
+      "media_id": movieId,
+      "watchlist": value
+    });
+    Map<String,String> header=Map();
+    header['Content-Type']='application/json;charset=utf-8';
+    http.Response response=await http.post(url,body: map,headers:header);
+    if((response.statusCode==200&&!value)||(response.statusCode==201&&value)){
+      return true;
+    }else{
+      return false;
     }
   }
 }
